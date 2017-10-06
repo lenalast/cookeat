@@ -14,7 +14,7 @@ class Home extends Component {
       <View style={styles.container}>
         <Text style={styles.title}>Welcome to CookEat!</Text>
         <Text style={styles.text}>This is the recepie app for you, who wants inspiration, nice flow and beautiful
-          pictures to motivate you to make aawesome dinners.</Text>
+          pictures to motivate you to make awesome dinners.</Text>
       </View>
     );
   }

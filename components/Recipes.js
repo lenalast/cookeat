@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image, ScrollView, TextInput} from 'react-native';
+import {StyleSheet, Text, View, Image, ScrollView, TextInput, Modal, TouchableHighlight} from 'react-native';
 import axios from 'axios';
 
 class Recipes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: []
+      dataSource: [],
+      modalVisible: false
     }
   }
 
@@ -22,8 +23,14 @@ class Recipes extends Component {
   filterAndMapObj(dataSource) {
     return dataSource.map((data, i) =>
       <View key={i} style={styles.recipesContainer}>
-        <Image style={{minWidth: 186, height: 120}}
-               source={{uri: data.img}}/>
+        <TouchableHighlight onPress={() => {
+          this.setState({modalVisible: true})
+        }}>
+          <Image style={{minWidth: 186, height: 120}}
+                 source={{uri: data.img}}
+          />
+        </TouchableHighlight>
+
         <View style={styles.recipeInfoWrapper}>
           <Text style={styles.recipeName}>{data.name}</Text>
           <Text style={styles.recipeTime}>{data.time} min</Text>
@@ -49,6 +56,18 @@ class Recipes extends Component {
             {dataSource}
           </View>
         </ScrollView>
+
+        <Modal visible={this.state.modalVisible}>
+          <Text>Modal!</Text>
+          <Text>Modal!</Text>
+          <Text>Modal!</Text>
+          <TouchableHighlight onPress={() => {
+            this.setState({modalVisible: false})
+          }}>
+            <Text>Hide Modal</Text>
+          </TouchableHighlight>
+        </Modal>
+
       </View>
     );
   }
