@@ -57,17 +57,27 @@ class Recipes extends Component {
           </View>
         </ScrollView>
 
-        <Modal visible={this.state.modalVisible}>
-          <Text>Modal!</Text>
-          <Text>Modal!</Text>
-          <Text>Modal!</Text>
-          <TouchableHighlight onPress={() => {
-            this.setState({modalVisible: false})
-          }}>
-            <Text>Hide Modal</Text>
-          </TouchableHighlight>
-        </Modal>
+        <Modal visible={this.state.modalVisible}
+               transparent={true}
+               animationType="slide"
+        >
 
+          <View style={styles.modal}>
+
+            <View style={styles.modalWrapper}>
+              <TouchableHighlight onPress={() => {
+                this.setState({modalVisible: false})
+              }}>
+                <Image style={styles.modalImg}
+                       source={require('../assets/cancel.png')}/>
+              </TouchableHighlight>
+              <Text>Modal!</Text>
+              <Text>Modal!</Text>
+              <Text>Modal!</Text>
+              <Text>Modal!</Text>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -129,5 +139,26 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     margin: 10,
+  },
+  modal: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalWrapper: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 300,
+    height: 400,
+    borderRadius: 2,
+    backgroundColor: '#6365A0',
+  },
+  modalImg: {
+    width: 22,
+    height: 22,
+    top: -150,
+    right: -130,
   }
 });
