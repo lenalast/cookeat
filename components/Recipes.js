@@ -13,7 +13,6 @@ class Recipes extends Component {
   componentDidMount() {
     return axios.get('http://localhost:3000/recipes')
       .then((res) => {
-        console.log("the response", res.data)
         const result = this.filterAndMapObj(res.data);
         this.setState({dataSource: result})
       })
@@ -25,7 +24,6 @@ class Recipes extends Component {
       <View key={i} style={styles.recipesContainer}>
         <Image style={{minWidth: 186, height: 120}}
                source={{uri: data.img}}/>
-        {console.log("from filter function", data.name + data.img)}
         <View style={styles.recipeInfoWrapper}>
           <Text style={styles.recipeName}>{data.name}</Text>
           <Text style={styles.recipeTime}>{data.time} min</Text>

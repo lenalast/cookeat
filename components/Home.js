@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Image } from 'react-native';
-import Video from 'react-native-video';
 
 class Home extends Component {
 
@@ -16,7 +15,6 @@ class Home extends Component {
         <Text style={styles.title}>Welcome to CookEat!</Text>
         <Text style={styles.text}>This is the recepie app for you, who wants inspiration, nice flow and beautiful
           pictures to motivate you to make aawesome dinners.</Text>
-        <Video style={{width: 300, height: 500}} source={require('../assets/lenabi.mp4')}/>
       </View>
     );
   }
