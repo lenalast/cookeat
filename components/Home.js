@@ -13,8 +13,9 @@ class Home extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Welcome to CookEat!</Text>
-        <Text style={styles.text}>This is the recepie app for you, who wants inspiration, nice flow and beautiful
+        <Text style={styles.text}>This is the recepie app for you who wants inspiration, nice flow and beautiful
           pictures to motivate you to make awesome dinners.</Text>
+        <Image style={{width: 300, height: 240, marginTop: 40,}} source={{uri: "http://s2.thingpic.com/images/V2/gUbXEuPNTVeR1F7kdk4fcCKi.jpeg"}}/>
       </View>
     );
   }

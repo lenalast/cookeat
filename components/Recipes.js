@@ -7,6 +7,7 @@ class Recipes extends Component {
     super(props);
     this.state = {
       dataSource: [],
+      showThisRecipe: [],
       modalVisible: false
     }
   }
@@ -24,7 +25,7 @@ class Recipes extends Component {
     return dataSource.map((data, i) =>
       <View key={i} style={styles.recipesContainer}>
         <TouchableHighlight onPress={() => {
-          this.setState({modalVisible: true})
+          this.setState({modalVisible: true, showThisRecipe: data})
         }}>
           <Image style={{minWidth: 186, height: 120}}
                  source={{uri: data.img}}
@@ -61,20 +62,16 @@ class Recipes extends Component {
                transparent={true}
                animationType="slide"
         >
-
           <View style={styles.modal}>
-
             <View style={styles.modalWrapper}>
               <TouchableHighlight onPress={() => {
                 this.setState({modalVisible: false})
               }}>
-                <Image style={styles.modalImg}
+                <Image style={styles.modalCancelImg}
                        source={require('../assets/cancel.png')}/>
               </TouchableHighlight>
-              <Text>Modal!</Text>
-              <Text>Modal!</Text>
-              <Text>Modal!</Text>
-              <Text>Modal!</Text>
+              <Text>{this.state.showThisRecipe.name}</Text>
+              <Image source={{uri: this.state.showThisRecipe.img}} style={{width: 200, height: 160}}/>
             </View>
           </View>
         </Modal>
@@ -155,7 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: '#6365A0',
   },
-  modalImg: {
+  modalCancelImg: {
     width: 22,
     height: 22,
     top: -150,

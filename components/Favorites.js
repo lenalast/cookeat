@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 260,
+    height: 200,
   }
 })
