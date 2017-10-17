@@ -11,8 +11,8 @@ class Recipes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: [],
-      searchedRecipe: [],
+      recipes: [],
+      filteredRecipes: [],
       showThisRecipe: [],
       modalVisible: false,
       text: ""
@@ -22,28 +22,34 @@ class Recipes extends Component {
   componentDidMount() {
     return axios.get('http://localhost:3000/recipes')
       .then((res) => {
-        const result = this.filterAndMapObj(res.data);
-        this.setState({dataSource: result})
+        this.setState({recipes: res.data})
       })
       .catch((error) => console.error(error))
   }
 
-  filterAndMapObj(dataSource) {
-    return dataSource.map((data, i) =>
+  renderRecipes(recipes) {
+    return recipes.map((recipe, i) =>
       <View key={i} style={styles.recipesContainer}>
         <TouchableHighlight onPress={() => {
-          this.setState({modalVisible: true, showThisRecipe: data})
+          this.setState({modalVisible: true, showThisRecipe: recipe})
         }}>
           <Image style={{minWidth: 186, height: 120}}
-                 source={{uri: data.img}}
+                 source={{uri: recipe.img}}
           />
         </TouchableHighlight>
 
         <View style={styles.recipeInfoWrapper}>
-          <Text style={styles.recipeName}>{data.name}</Text>
-          <Text style={styles.recipeTime}>{data.time} min</Text>
+          <Text style={styles.recipeName}>{recipe.name}</Text>
+          <Text style={styles.recipeTime}>{recipe.time} min</Text>
         </View>
       </View>)
+  }
+
+  searchRecipe = (searchText) => {
+    const {recipes} = this.state
+
+    const filteredRecipes = recipes.filter(recipe => recipe.name.startsWith(searchText))
+    this.setState({filteredRecipes, text: searchText})
   }
 
   static navigationOptions = {
@@ -55,21 +61,25 @@ class Recipes extends Component {
   _keyExtractor = (i) => i;
 
   render() {
-    const {dataSource, showThisRecipe, modalVisible, text, searchedRecipe} = this.state
+    const {recipes, filteredRecipes, showThisRecipe, modalVisible, text} = this.state
+
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Recipes</Text>
         <TextInput style={styles.input}
                    placeholder="Search for recipes"
-                   value={text}
-                   // onSubmitEditing={(text) => console.log(text)}
-                   onChangeText={(text) => this.setState({text: text})}
+                   onChangeText={(text) => this.searchRecipe(text)}
         />
-        <Text>{text}</Text>
         <ScrollView>
           <View style={styles.recipes}>
-            {dataSource}
-            {dataSource}
+            {
+              !filteredRecipes.length && text.length ? <Text>No result</Text> :
+            this.renderRecipes(filteredRecipes.length ? filteredRecipes : recipes)
+            }
+            {
+              !filteredRecipes.length && text.length ? <Text>{}</Text> :
+            this.renderRecipes(filteredRecipes.length ? filteredRecipes : recipes)
+            }
           </View>
         </ScrollView>
 
