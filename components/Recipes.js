@@ -14,6 +14,7 @@ class Recipes extends Component {
       recipes: [],
       filteredRecipes: [],
       showThisRecipe: [],
+      favoriteRecipes: false,
       modalVisible: false,
       text: ""
     }
@@ -52,6 +53,11 @@ class Recipes extends Component {
     this.setState({filteredRecipes, text: searchText})
   }
 
+  handleFavoriteRecipes() {
+    !this.state.favoriteRecipes ? this.setState({favoriteRecipes: true})
+      : this.setState({favoriteRecipes: false})
+  }
+
   static navigationOptions = {
     tabBarLabel: 'Recipes',
     tabBarIcon: ({tintColor}) => (<Image style={[{width: 22, height: 22}, {tintColor: tintColor}]}
@@ -61,7 +67,7 @@ class Recipes extends Component {
   _keyExtractor = (i) => i;
 
   render() {
-    const {recipes, filteredRecipes, showThisRecipe, modalVisible, text} = this.state
+    const {recipes, filteredRecipes, showThisRecipe, favoriteRecipes, modalVisible, text} = this.state
 
     return (
       <View style={styles.container}>
@@ -74,11 +80,11 @@ class Recipes extends Component {
           <View style={styles.recipes}>
             {
               !filteredRecipes.length && text.length ? <Text>No result</Text> :
-            this.renderRecipes(filteredRecipes.length ? filteredRecipes : recipes)
+                this.renderRecipes(filteredRecipes.length ? filteredRecipes : recipes)
             }
             {
               !filteredRecipes.length && text.length ? <Text>{}</Text> :
-            this.renderRecipes(filteredRecipes.length ? filteredRecipes : recipes)
+                this.renderRecipes(filteredRecipes.length ? filteredRecipes : recipes)
             }
           </View>
         </ScrollView>
@@ -88,12 +94,27 @@ class Recipes extends Component {
                animationType="slide"
         >
           <View style={styles.modal}>
-            <TouchableHighlight onPress={() => {
-              this.setState({modalVisible: false})
-            }}>
+            <TouchableHighlight underlayColor='#6365a0'
+                                onPress={() => {
+                                  this.setState({modalVisible: false})
+                                }}>
               <Image style={styles.modalCancelImg}
                      source={require('../assets/left-arrow.png')}/>
             </TouchableHighlight>
+
+
+            <TouchableHighlight underlayColor='#6365a0'
+                                onPress={() => this.handleFavoriteRecipes()
+                                }>
+              {
+                favoriteRecipes ? <Image style={styles.modalCancelImg}
+                                         source={require('../assets/002-star.png')}/>
+                  : <Image style={styles.modalCancelImg}
+                           source={require('../assets/001-star-1.png')}/>
+              }
+            </TouchableHighlight>
+
+
             <Text style={styles.recipeNameModal}>{showThisRecipe.name}</Text>
             <Image source={{uri: showThisRecipe.img}} style={styles.modalImg}/>
             <FlatList

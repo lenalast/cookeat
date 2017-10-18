@@ -10,6 +10,10 @@ class Favorites extends Component {
   }
 
   render() {
+    const {favorite} = this.props
+
+    console.log("favorit recept", favorite)
+
     return (
       <View style={styles.container}>
         <Text>Favorites</Text>
