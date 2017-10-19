@@ -22,11 +22,8 @@ class Recipes extends Component {
     this.fetchRecipes();
   }
 
-  componentWillReceiveProps() {
-    console.log('yes indeed')
-  }
-
   fetchRecipes() {
+    //Gets the recipes from the API and saves it to recipes state
     axios.get('http://localhost:3000/recipes')
       .then((res) => {
         this.setState({recipes: res.data})
@@ -41,15 +38,6 @@ class Recipes extends Component {
         style={[{width: 22, height: 22}, {tintColor: tintColor}]}
         source={require('../assets/food.png')}
       /> )
-  }
-
-  updateRecipeAsFavorite(favRecipe) {
-    const { recipes } = this.props
-    recipes.map(recipe => {
-      if (recipe.id === favRecipe.id) {
-        recipe.favorite = !recipe.favorite
-      }
-    })
   }
 
   render() {

@@ -5,6 +5,8 @@ import Home from './components/Home';
 import {Router, Scene, Tabs }  from 'react-native-router-flux';
 import Recipe from "./components/Recipe";
 
+//App handles all the routes.
+
 const App = () => (
   <Router>
       <Tabs

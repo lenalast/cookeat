@@ -6,6 +6,7 @@ import {
 
 class Home extends Component {
   static navigationOptions = {
+    //Tells the navigation what options to handle
     tabBarLabel: 'Home',
     tabBarIcon: ({tintColor}) => (
       <Image

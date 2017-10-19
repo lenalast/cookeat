@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
   StyleSheet, Text, View, Image,
-  TouchableHighlight, ScrollView, Dimensions
+  TouchableHighlight, ScrollView, Dimensions,
 } from 'react-native';
 import axios from 'axios';
 import {Actions}  from 'react-native-router-flux';
@@ -33,14 +33,14 @@ class Favorites extends Component {
       <View style={styles.container}>
         <ScrollView>
           {
-            this.renderRecipes(recipes)
+            this.renderFavoriteRecipes(recipes)
           }
         </ScrollView>
       </View>
     );
   }
 
-  renderRecipes(recipes) {
+  renderFavoriteRecipes(recipes) {
     return recipes.map((recipe, i) =>
       recipe.favorite ?
         <View key={i} style={styles.recipesContainer}>
@@ -62,7 +62,6 @@ class Favorites extends Component {
     )
   }
 }
-
 export default Favorites;
 
 const dimensions = Dimensions.get('window');

@@ -67,8 +67,6 @@ class Recipe extends Component {
 
   saveRecipeToFavorites(recipe) {
     // make put request
-    console.log(recipe.favorite, "&& ", recipe.id)
-
     axios.patch('http://localhost:3000/recipes/' + recipe.id, {favorite: !recipe.favorite})
       .then(res => console.log(res.data))
       .catch(err => console.error(err))
