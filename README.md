@@ -26,6 +26,7 @@ You can see and search for recipes. Also save your favorite recipes.
 * TouchableHiglight
 * ScrollView
 * Dimensions
+
 [Go to react native docs for more information about the different components](https://facebook.github.io/react-native/docs/getting-started.html)
 
 ## Links
