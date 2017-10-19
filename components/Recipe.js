@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-  StyleSheet, Modal, View, Text,
+  StyleSheet, View, Text,
   TouchableHighlight, Image, FlatList
 } from 'react-native';
 import axios from 'axios';
