@@ -1,5 +1,4 @@
-This project was bootstrapped with [Create React Native App]
-For more information on CRNA go to: (https://github.com/react-community/create-react-native-app).
+###### This project was bootstrapped with For more information on CRNA go to: [Create React Native App](https://github.com/react-community/create-react-native-app).
  
 ### Lena Last, class AJK16G on Jensen Education
 
