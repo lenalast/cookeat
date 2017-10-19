@@ -1,38 +1,93 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
-
+import {
+  StyleSheet, Text, View, Image,
+  TouchableHighlight, ScrollView, Dimensions
+} from 'react-native';
+import axios from 'axios';
+import {Actions}  from 'react-native-router-flux';
 
 class Favorites extends Component {
+  state = {
+    recipes: [],
+  }
+
   static navigationOptions = {
     tabBarLabel: 'Favorites',
-    tabBarIcon: ({ tintColor }) => (<Image style={[{width: 22, height: 22}, {tintColor: tintColor}]}
-                                           source={require('../assets/food_basket.png')}/> )
+    tabBarIcon: ({tintColor}) => (
+      <Image
+        style={[{width: 22, height: 22}, {tintColor: tintColor}]}
+        source={require('../assets/food_basket.png')}
+      /> )
+  }
+
+  componentWillMount() {
+    axios.get('http://localhost:3000/recipes')
+      .then((res) => this.setState({recipes: res.data}))
+      .catch((error) => console.error(error))
   }
 
   render() {
-    const {favorite} = this.props
-
-    console.log("favorit recept", favorite)
+    const {recipes} = this.state
 
     return (
       <View style={styles.container}>
-        <Text>Favorites</Text>
-        <Image style={styles.image} source={require('../assets/blueberries.jpg')}/>
+        <ScrollView>
+          {
+            this.renderRecipes(recipes)
+          }
+        </ScrollView>
       </View>
     );
+  }
+
+  renderRecipes(recipes) {
+    return recipes.map((recipe, i) =>
+      recipe.favorite ?
+        <View key={i} style={styles.recipesContainer}>
+          <TouchableHighlight onPress={() => {
+            // sends props to next scene
+            Actions.recipe({recipe})
+          }}>
+            <Image style={{width: 'auto', height: 160}}
+                   source={{uri: recipe.img}}
+            />
+          </TouchableHighlight>
+
+          <View style={styles.recipeInfoWrapper}>
+            <Text style={styles.recipeName}>{recipe.name}</Text>
+            <Text style={styles.recipeTime}>{recipe.time} min</Text>
+          </View>
+        </View> :
+        null
+    )
   }
 }
 
 export default Favorites;
 
+const dimensions = Dimensions.get('window');
+const imageWidth = dimensions.width;
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
+    width: imageWidth,
+    padding: 20,
   },
-  image: {
-    width: 260,
-    height: 200,
-  }
+  recipeInfoWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: 10,
+    marginRight: 10,
+    paddingBottom: 10,
+  },
+  recipeName: {
+    fontFamily: 'Futura',
+    fontSize: 16,
+  },
+  recipeTime: {
+    paddingTop: 4,
+    fontSize: 12,
+    color: 'red',
+  },
 })

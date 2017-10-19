@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {
   StyleSheet, Text, View, Image,
-  ScrollView, TextInput, Modal, TouchableHighlight,
+  ScrollView, TextInput, TouchableHighlight,
   FlatList,
-}
-  from 'react-native';
+} from 'react-native';
 import axios from 'axios';
 import { Actions } from 'react-native-router-flux';
 
@@ -15,7 +14,6 @@ class Recipes extends Component {
       recipes: [],
       filteredRecipes: [],
       selectedRecipe: [],
-      isModalVisible: false,
       searchString: ""
     }
   }
@@ -38,8 +36,11 @@ class Recipes extends Component {
 
   static navigationOptions = {
     tabBarLabel: 'Recipes',
-    tabBarIcon: ({tintColor}) => (<Image style={[{width: 22, height: 22}, {tintColor: tintColor}]}
-                                         source={require('../assets/food.png')}/> )
+    tabBarIcon: ({tintColor}) => (
+      <Image
+        style={[{width: 22, height: 22}, {tintColor: tintColor}]}
+        source={require('../assets/food.png')}
+      /> )
   }
 
   updateRecipeAsFavorite(favRecipe) {
@@ -55,14 +56,11 @@ class Recipes extends Component {
     const {
       recipes,
       filteredRecipes,
-      selectedRecipe,
-      isModalVisible,
       searchString,
     } = this.state
 
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Recipes</Text>
         <TextInput
           style={styles.input}
           placeholder="Search for recipes"
@@ -107,7 +105,6 @@ class Recipes extends Component {
     this.setState({filteredRecipes, searchString: searchText})
   }
 }
-
 export default Recipes;
 
 const styles = StyleSheet.create({
@@ -116,18 +113,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
   },
-  title: {
-    marginBottom: 10,
-    fontFamily: 'Futura',
-    fontSize: 22,
-    color: '#DD7C9D',
-  },
-  text: {
-    margin: 20,
-    textAlign: 'center',
-  },
   input: {
-    marginBottom: 40,
+    margin: 20,
     padding: 10,
     borderStyle: 'solid',
     borderWidth: 1,
@@ -158,47 +145,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-  },
-  recipeNameModal: {
-    marginLeft: 10,
-    fontSize: 22,
-    fontFamily: 'Futura',
-    color: 'white',
-    textAlign: 'left',
-  },
-  ingredientsWrapper: {
-    width: 200,
-    backgroundColor: 'white',
-  },
-  wrapper: {
-    width: 200,
-  },
-  ingredients: {
-    textAlign: 'left',
-    padding: 10,
-  },
-  image: {
-    width: 150,
-    height: 150,
-    margin: 10,
-  },
-  modal: {
-    flex: 1,
-    flexDirection: 'column',
-    paddingTop: 20,
-    width: 380,
-    maxHeight: 610,
-    backgroundColor: '#6365a0',
-  },
-  modalCancelImg: {
-    width: 18,
-    height: 16,
-    margin: 10,
-    top: 0,
-    left: 0,
-  },
-  modalImg: {
-    width: 380,
-    height: 200,
   },
 });

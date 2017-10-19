@@ -2,7 +2,7 @@ import React from 'react';
 import Recipes from './components/Recipes';
 import Favorites from './components/Favorites';
 import Home from './components/Home';
-import {Router, Stack, Scene, Tabs, Actions }  from 'react-native-router-flux';
+import {Router, Scene, Tabs }  from 'react-native-router-flux';
 import Recipe from "./components/Recipe";
 
 const App = () => (
@@ -23,21 +23,21 @@ const App = () => (
           <Scene
             key="recipe"
             component={Recipe}
-            onBack={ (recipe) => Actions.recipesList(this.saveRecipeToFavorites(recipe))}
+            title="Recipe"
           />
         </Scene>
-        <Scene key="favorites" component={Favorites} title="Favs"/>
+        <Scene key="favorites" title="Favorites">
+          <Scene
+            key="favorite"
+            component={Favorites}
+          />
+          <Scene
+            key="recipe"
+            component={Recipe}
+            title="Recipe"
+          />
+        </Scene>
       </Tabs>
   </Router>
 );
-
-saveRecipeToFavorites = (recipe) => {
-  // make put request
-  console.log("Jag körs!", recipe)
-
-  axios.patch('http://localhost:3000/recipes/' + recipe.id, {favorite: !recipe.favorite})
-    .then(res => console.log(res.data))
-    .catch(err => console.error(err))
-}
-
 export default App
