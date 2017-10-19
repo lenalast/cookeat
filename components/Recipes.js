@@ -6,6 +6,7 @@ import {
 }
   from 'react-native';
 import axios from 'axios';
+import { Actions } from 'react-native-router-flux';
 
 class Recipes extends Component {
   constructor(props) {
@@ -13,26 +14,79 @@ class Recipes extends Component {
     this.state = {
       recipes: [],
       filteredRecipes: [],
-      showThisRecipe: [],
-      favoriteRecipes: false,
-      modalVisible: false,
-      text: ""
+      selectedRecipe: [],
+      isModalVisible: false,
+      searchString: ""
     }
   }
 
   componentDidMount() {
-    return axios.get('http://localhost:3000/recipes')
+    this.fetchRecipes();
+  }
+
+  componentWillReceiveProps() {
+    console.log('yes indeed')
+  }
+
+  fetchRecipes() {
+    axios.get('http://localhost:3000/recipes')
       .then((res) => {
         this.setState({recipes: res.data})
       })
       .catch((error) => console.error(error))
   }
 
+  static navigationOptions = {
+    tabBarLabel: 'Recipes',
+    tabBarIcon: ({tintColor}) => (<Image style={[{width: 22, height: 22}, {tintColor: tintColor}]}
+                                         source={require('../assets/food.png')}/> )
+  }
+
+  updateRecipeAsFavorite(favRecipe) {
+    const { recipes } = this.props
+    recipes.map(recipe => {
+      if (recipe.id === favRecipe.id) {
+        recipe.favorite = !recipe.favorite
+      }
+    })
+  }
+
+  render() {
+    const {
+      recipes,
+      filteredRecipes,
+      selectedRecipe,
+      isModalVisible,
+      searchString,
+    } = this.state
+
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Recipes</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Search for recipes"
+          onChangeText={(text) => this.searchRecipe(text)}
+        />
+        <ScrollView>
+          <View style={styles.recipes}>
+            {
+              (!filteredRecipes.length && searchString.length) ?
+                <Text>No result</Text> :
+                this.renderRecipes(filteredRecipes.length ? filteredRecipes : recipes)
+            }
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+
   renderRecipes(recipes) {
     return recipes.map((recipe, i) =>
       <View key={i} style={styles.recipesContainer}>
         <TouchableHighlight onPress={() => {
-          this.setState({modalVisible: true, showThisRecipe: recipe})
+          // sends props to next scene
+          Actions.recipe({ recipe })
         }}>
           <Image style={{minWidth: 186, height: 120}}
                  source={{uri: recipe.img}}
@@ -50,88 +104,7 @@ class Recipes extends Component {
     const {recipes} = this.state
 
     const filteredRecipes = recipes.filter(recipe => recipe.name.startsWith(searchText))
-    this.setState({filteredRecipes, text: searchText})
-  }
-
-  handleFavoriteRecipes() {
-    !this.state.favoriteRecipes ? this.setState({favoriteRecipes: true})
-      : this.setState({favoriteRecipes: false})
-  }
-
-  static navigationOptions = {
-    tabBarLabel: 'Recipes',
-    tabBarIcon: ({tintColor}) => (<Image style={[{width: 22, height: 22}, {tintColor: tintColor}]}
-                                         source={require('../assets/food.png')}/> )
-  }
-
-  _keyExtractor = (i) => i;
-
-  render() {
-    const {recipes, filteredRecipes, showThisRecipe, favoriteRecipes, modalVisible, text} = this.state
-
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Recipes</Text>
-        <TextInput style={styles.input}
-                   placeholder="Search for recipes"
-                   onChangeText={(text) => this.searchRecipe(text)}
-        />
-        <ScrollView>
-          <View style={styles.recipes}>
-            {
-              !filteredRecipes.length && text.length ? <Text>No result</Text> :
-                this.renderRecipes(filteredRecipes.length ? filteredRecipes : recipes)
-            }
-            {
-              !filteredRecipes.length && text.length ? <Text>{}</Text> :
-                this.renderRecipes(filteredRecipes.length ? filteredRecipes : recipes)
-            }
-          </View>
-        </ScrollView>
-
-        <Modal visible={modalVisible}
-               transparent={true}
-               animationType="slide"
-        >
-          <View style={styles.modal}>
-            <TouchableHighlight underlayColor='#6365a0'
-                                onPress={() => {
-                                  this.setState({modalVisible: false})
-                                }}>
-              <Image style={styles.modalCancelImg}
-                     source={require('../assets/left-arrow.png')}/>
-            </TouchableHighlight>
-
-
-            <TouchableHighlight underlayColor='#6365a0'
-                                onPress={() => this.handleFavoriteRecipes()
-                                }>
-              {
-                favoriteRecipes ? <Image style={styles.modalCancelImg}
-                                         source={require('../assets/002-star.png')}/>
-                  : <Image style={styles.modalCancelImg}
-                           source={require('../assets/001-star-1.png')}/>
-              }
-            </TouchableHighlight>
-
-
-            <Text style={styles.recipeNameModal}>{showThisRecipe.name}</Text>
-            <Image source={{uri: showThisRecipe.img}} style={styles.modalImg}/>
-            <FlatList
-              data={showThisRecipe.ingredients}
-              keyExtractor={this._keyExtractor}
-              renderItem={
-                ({item}) =>
-                  <View style={styles.ingredientsWrapper}>
-                    <View style={styles.wrapper}>
-                      <Text style={styles.ingredients}>{item}</Text>
-                    </View>
-                  </View>
-              }/>
-          </View>
-        </Modal>
-      </View>
-    );
+    this.setState({filteredRecipes, searchString: searchText})
   }
 }
 
@@ -142,7 +115,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    marginTop: 40,
   },
   title: {
     marginBottom: 10,
