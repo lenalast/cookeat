@@ -1,12 +1,14 @@
 ###### This project was bootstrapped with For more information on CRNA go to: [Create React Native App](https://github.com/react-community/create-react-native-app).
  
-### Lena Last, class AJK16G on Jensen Education
+#### Lena Last, class AJK16G on Jensen Education
 
 [LinkedIn profile](https://www.linkedin.com/in/lena-last/)
 
 ## Description
 This is a school project and I'm doing a Recipe Book app. 
 You can see and search for recipes. Also save your favorite recipes.
+
+![A sneek-peek](https://github.com/lenalast/cookeat/blob/master/assets/Screen%20Shot%202017-10-19%20at%2015.05.16.png)
 
 ## Technologies
 * CRNA (Create React Native App)
