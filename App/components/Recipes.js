@@ -4,8 +4,10 @@ import {
   ScrollView, TextInput, TouchableHighlight,
   FlatList,
 } from 'react-native';
-import axios from 'axios';
-import { Actions } from 'react-native-router-flux';
+import {Actions} from 'react-native-router-flux';
+import {connect} from "react-redux";
+import {fetchRecipes } from '../redux/recipes/recipes.actions';
+import { setRecipe } from '../redux/recipe/recipe.actions';
 
 class Recipes extends Component {
   constructor(props) {
@@ -19,16 +21,7 @@ class Recipes extends Component {
   }
 
   componentDidMount() {
-    this.fetchRecipes();
-  }
-
-  fetchRecipes() {
-    //Gets the recipes from the API and saves it to recipes state
-    axios.get('http://localhost:3000/recipes')
-      .then((res) => {
-        this.setState({recipes: res.data})
-      })
-      .catch((error) => console.error(error))
+    this.props.fetchRecipes()
   }
 
   static navigationOptions = {
@@ -36,16 +29,18 @@ class Recipes extends Component {
     tabBarIcon: ({tintColor}) => (
       <Image
         style={[{width: 22, height: 22}, {tintColor: tintColor}]}
-        source={require('../assets/food.png')}
+        source={require('../../assets/food.png')}
       /> )
   }
 
   render() {
     const {
-      recipes,
       filteredRecipes,
       searchString,
     } = this.state
+
+    const { recipes } = this.props
+
 
     return (
       <View style={styles.container}>
@@ -72,7 +67,8 @@ class Recipes extends Component {
       <View key={i} style={styles.recipesContainer}>
         <TouchableHighlight onPress={() => {
           // sends props to next scene
-          Actions.recipe({ recipe })
+          this.props.setRecipe(recipe)
+          Actions.recipe()
         }}>
           <Image style={{minWidth: 186, height: 120}}
                  source={{uri: recipe.img}}
@@ -87,13 +83,22 @@ class Recipes extends Component {
   }
 
   searchRecipe = (searchText) => {
-    const {recipes} = this.state
+    const {recipes} = this.props
 
     const filteredRecipes = recipes.filter(recipe => recipe.name.startsWith(searchText))
     this.setState({filteredRecipes, searchString: searchText})
   }
 }
-export default Recipes;
+
+export default connect(
+  (state) => ({
+    recipes: state.recipes
+  }),
+  {
+    fetchRecipes: fetchRecipes,
+    setRecipe: setRecipe,
+  }
+)(Recipes);
 
 const styles = StyleSheet.create({
   container: {
@@ -102,12 +107,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
+    width: 340,
     margin: 20,
     padding: 10,
+    borderBottomWidth: 1,
     borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: "#e2e2e2",
-    borderRadius: 50,
+    borderRadius: 2,
+    borderBottomColor: "black",
     fontSize: 12,
   },
   recipesContainer: {

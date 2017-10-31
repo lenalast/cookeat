@@ -5,29 +5,21 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import {Actions}  from 'react-native-router-flux';
+import {connect} from "react-redux";
+import {setRecipe} from "../redux/recipe/recipe.actions";
 
 class Favorites extends Component {
-  state = {
-    recipes: [],
-  }
-
   static navigationOptions = {
     tabBarLabel: 'Favorites',
     tabBarIcon: ({tintColor}) => (
       <Image
         style={[{width: 22, height: 22}, {tintColor: tintColor}]}
-        source={require('../assets/food_basket.png')}
+        source={require('../../assets/food_basket.png')}
       /> )
   }
 
-  componentWillMount() {
-    axios.get('http://localhost:3000/recipes')
-      .then((res) => this.setState({recipes: res.data}))
-      .catch((error) => console.error(error))
-  }
-
   render() {
-    const {recipes} = this.state
+    const {recipes = []} = this.props
 
     return (
       <View style={styles.container}>
@@ -42,11 +34,12 @@ class Favorites extends Component {
 
   renderFavoriteRecipes(recipes) {
     return recipes.map((recipe, i) =>
-      recipe.favorite ?
-        <View key={i} style={styles.recipesContainer}>
+      recipe.favorite &&
+        <View key={recipe.id} style={styles.recipesContainer}>
           <TouchableHighlight onPress={() => {
             // sends props to next scene
-            Actions.recipe({recipe})
+            this.props.dispatch(setRecipe(recipe))
+            Actions.favoriteRecipe()
           }}>
             <Image style={{width: 'auto', height: 160}}
                    source={{uri: recipe.img}}
@@ -57,12 +50,15 @@ class Favorites extends Component {
             <Text style={styles.recipeName}>{recipe.name}</Text>
             <Text style={styles.recipeTime}>{recipe.time} min</Text>
           </View>
-        </View> :
-        null
+        </View>
     )
   }
 }
-export default Favorites;
+export default connect(
+  (state) => ({
+    recipes: state.recipes
+  }),
+)(Favorites);
 
 const dimensions = Dimensions.get('window');
 const imageWidth = dimensions.width;

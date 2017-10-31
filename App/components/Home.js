@@ -11,7 +11,7 @@ class Home extends Component {
     tabBarIcon: ({tintColor}) => (
       <Image
         style={[{width: 22, height: 22}, {tintColor: tintColor}]}
-        source={require('../assets/chef_hat.png')}
+        source={require('../../assets/chef_hat.png')}
       /> )
   };
 

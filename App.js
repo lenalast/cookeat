@@ -1,21 +1,24 @@
-import React from 'react';
-import Recipes from './components/Recipes';
-import Favorites from './components/Favorites';
-import Home from './components/Home';
-import {Router, Scene, Tabs }  from 'react-native-router-flux';
-import Recipe from "./components/Recipe";
+import React, {Component} from 'react';
+import Recipes from './App/components/Recipes';
+import Favorites from './App/components/Favorites';
+import Home from './App/components/Home';
+import {Router, Scene, Tabs, Actions}  from 'react-native-router-flux';
+import Recipe from "./App/components/Recipe";
+import axios from 'axios';
+import {Provider} from 'react-redux';
+import store from './App/redux/store';
 
-//App handles all the routes.
-
-const App = () => (
-  <Router>
+// App handles all the routes.
+const App = ({recipes, recipe}) => (
+  <Provider store={store}>
+    <Router>
       <Tabs
-        key="tabbar"
-        tabBarStyle={{ backgroundColor: '#a9a0df' }}
+        key="tabs"
+        tabBarStyle={{backgroundColor: '#a9a0df'}}
         activeBackgroundColor="#6365a0"
         activeTintColor="white"
         inactiveTintColor="#e2e2e2"
-        >
+      >
         <Scene key="home" component={Home} title="Home"/>
         <Scene key="recipes" title="Recipes">
           <Scene
@@ -34,12 +37,14 @@ const App = () => (
             component={Favorites}
           />
           <Scene
-            key="recipe"
+            key="favoriteRecipe"
             component={Recipe}
             title="Recipe"
           />
         </Scene>
       </Tabs>
-  </Router>
-);
+    </Router>
+  </Provider>
+)
+
 export default App

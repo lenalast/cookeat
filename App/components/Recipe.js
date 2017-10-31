@@ -4,19 +4,26 @@ import {
   TouchableHighlight, Image, FlatList
 } from 'react-native';
 import axios from 'axios';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { updateRecipe } from '../redux/recipe/recipe.actions';
 
 class Recipe extends Component {
-  state = {
-    showStar: false,
+
+  static navigationOptions = {
+    tabBarLabel: 'Recipe',
+    tabBarIcon: ({tintColor}) => (
+      <Image
+        style={[{width: 22, height: 22}, {tintColor: tintColor}]}
+        source={require('../../assets/food.png')}
+      /> )
   }
 
   render() {
     const {
-      showStar
-    } = this.state
-    const {
       recipe,
     } = this.props
+
     return (
       <View>
         <View style={styles.modal}>
@@ -26,16 +33,16 @@ class Recipe extends Component {
                 <Text style={styles.recipeNameModal}>{recipe.name}</Text>
                 <TouchableHighlight
                   underlayColor='#6365a0'
-                  onPress={() => this.toggleStar(recipe)}>
+                  onPress={() => this.saveRecipeToFavorites(recipe)}>
                   {
                     recipe.favorite ?
                       <Image
                         style={styles.star}
-                        source={require('../assets/yellow-star.png')}
+                        source={require('../../assets/yellow-star.png')}
                       /> :
                       <Image
                         style={styles.star}
-                        source={require('../assets/black_star.png')}
+                        source={require('../../assets/black_star.png')}
                       />
                   }
                 </TouchableHighlight>
@@ -57,22 +64,15 @@ class Recipe extends Component {
     )
   }
 
-  toggleStar(recipe) {
-    this.state.showStar ?
-      this.setState({showStar: false}) :
-      this.setState({showStar: true})
-
-    this.saveRecipeToFavorites(recipe)
-  }
-
   saveRecipeToFavorites(recipe) {
-    // make put request
-    axios.patch('http://localhost:3000/recipes/' + recipe.id, {favorite: !recipe.favorite})
-      .then(res => console.log(res.data))
-      .catch(err => console.error(err))
+    this.props.dispatch(updateRecipe(recipe))
   }
 }
-export default Recipe;
+export default connect(
+  (state) => ({
+    recipe: state.recipe,
+  })
+)(Recipe);
 
 const styles = StyleSheet.create({
   star: {
