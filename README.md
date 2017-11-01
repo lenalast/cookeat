@@ -10,6 +10,12 @@ You can see and search for recipes. Also save your favorite recipes.
 
 ![A sneek-peek](https://github.com/lenalast/cookeat/blob/master/assets/Screen%20Shot%202017-10-19%20at%2015.05.16.png)
 
+## How to get started
+(First you need too have a simulator on your computer or use Expo on your phone. Google how to do that, then:)
+* Clone or download the repository
+* npm install --save 
+* npm start
+
 ## Technologies
 * CRNA (Create React Native App)
 * axios
